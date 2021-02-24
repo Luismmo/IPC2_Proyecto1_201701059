@@ -1,6 +1,5 @@
-class Matriz():
-    def __init__(self, nombre ,x, y):
+class Lista():
+    def __init__(self, nombre):
         self.nombre = nombre
-        self.x= x
-        self.y = y
+        self.filas = None
         self.siguiente = None 
