@@ -1,5 +1,5 @@
 class Lista():
     def __init__(self, nombre):
         self.nombre = nombre
-        self.filas = None
+        self.matriz = None
         self.siguiente = None 
