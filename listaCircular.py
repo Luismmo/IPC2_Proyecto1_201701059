@@ -43,7 +43,7 @@ class ListaEnlazada:
                 nuevo.siguiente = self.inicio
                 self.tamanio+=1
     
-    def retornarIndice(self, indice):
+    def retornarEn(self, indice):
         temporal = self.inicio
         contador = 1
         while contador < indice:

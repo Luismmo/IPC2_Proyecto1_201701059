@@ -1,6 +1,8 @@
+from xml.dom import minidom
 import os
 
 class HorsePower():
+    gate = None
     def Menu(self):
         salida = True
         while salida:
@@ -15,7 +17,7 @@ class HorsePower():
 
             opcion = int(input('\n\tIngrese una opción: '))
             if opcion == 1:
-                input('Cargando Archivo')
+                self.cargarArchivo()
             elif opcion == 2:
                 input('Procesando Archivo')
             elif opcion == 3:
@@ -32,6 +34,13 @@ class HorsePower():
     
     def Clrscr(self):
         os.system('cls')
+
+    def cargarArchivo(self):
+        self.Clrscr()
+        ruta = input('Ingrese la ruta del archivo: ')
+        mixml = minidom.parse(ruta)
+        gate = mixml
+        input('\nCarga de archivo exitosa, presione ENTER para continuar.')
     
     def datosEstudiante(self):
         self.Clrscr()
