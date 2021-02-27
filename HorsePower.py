@@ -1,10 +1,15 @@
 from xml.dom import minidom
 import os
+from listaCircular import ListaEnlazada
+import time
 
 class HorsePower():
-    gate = None
+    def __init__(self):        
+        self.gate = None    
+        self.matrices = ListaEnlazada()
+        
     def Menu(self):
-        salida = True
+        salida = True        
         while salida:
             self.Clrscr()
             print('Menu Principal:\n')
@@ -19,7 +24,7 @@ class HorsePower():
             if opcion == 1:
                 self.cargarArchivo()
             elif opcion == 2:
-                input('Procesando Archivo')
+                self.procesarArchivo()
             elif opcion == 3:
                 input('escribiendo Archivo')
             elif opcion == 4:
@@ -34,12 +39,28 @@ class HorsePower():
     
     def Clrscr(self):
         os.system('cls')
+    
+    def procesarArchivo(self):
+        self.Clrscr()
+        print('Procesando archivo XML, cargando matrices...')
+        nombres = self.gate.getElementsByTagName('matriz')    
+        contador = 1
+        for matriz in nombres:
+            self.matrices.insertar(matriz.attributes['nombre'].value)
+            fila = matriz.getAttribute('n')
+            columna = matriz.getAttribute('m')
+            for a in range(fila):
+                
+            print('Matriz cargada exitosamente.')
+            time.sleep(0.4)
+        #print(nombres[0].attributes['nombre'].value)
+        input('\nProceso terminado, presione ENTER para continuar.')
 
     def cargarArchivo(self):
         self.Clrscr()
         ruta = input('Ingrese la ruta del archivo: ')
-        mixml = minidom.parse(ruta)
-        gate = mixml
+        mixml = minidom.parse(ruta)        
+        self.gate = mixml
         input('\nCarga de archivo exitosa, presione ENTER para continuar.')
     
     def datosEstudiante(self):
