@@ -49,8 +49,17 @@ class HorsePower():
             self.matrices.insertar(matriz.attributes['nombre'].value)
             fila = matriz.getAttribute('n')
             columna = matriz.getAttribute('m')
-            for a in range(fila):
-                
+            filas = ListaEnlazada()
+            for a in range(int(fila)):
+                filax= ListaEnlazada()
+                filas.insertarLi(filax)
+            datos = matriz.getElementsByTagName('dato')
+            for dato in datos:
+                x = int(dato.attributes['x'].value)
+                valor = dato.firstChild.data
+                filas.retornarEn(x).insertar(valor)
+            self.matrices.retornarEn(contador).matriz= filas
+            contador+=1                            
             print('Matriz cargada exitosamente.')
             time.sleep(0.4)
         #print(nombres[0].attributes['nombre'].value)
