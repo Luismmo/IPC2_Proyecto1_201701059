@@ -3,6 +3,7 @@ from nodoMatriz import Lista
 class ListaEnlazada:
     def __init__(self):
         self.tamanio = 0
+        self.binario = ''
         self.inicio = None
     
     def insertar(self, dato):

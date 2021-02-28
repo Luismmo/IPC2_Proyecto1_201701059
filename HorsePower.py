@@ -58,11 +58,18 @@ class HorsePower():
                 x = int(dato.attributes['x'].value)
                 valor = dato.firstChild.data
                 filas.retornarEn(x).insertar(valor)
+                if int(valor) == 0:
+                    filas.retornarEn(x).binario+='0'
+                else:
+                    filas.retornarEn(x).binario+='1'
             self.matrices.retornarEn(contador).matriz= filas
             contador+=1                            
             print('Matriz cargada exitosamente.')
             time.sleep(0.4)
         #print(nombres[0].attributes['nombre'].value)
+        print(self.matrices.retornarEn(1).nombre)
+        print('acceso binario: '+self.matrices.retornarEn(1).matriz.retornarEn(1).binario)
+        self.matrices.retornarEn(1).matriz.retornarEn(1).mostrarNodos()
         input('\nProceso terminado, presione ENTER para continuar.')
 
     def cargarArchivo(self):
