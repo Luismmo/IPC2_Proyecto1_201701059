@@ -3,7 +3,8 @@ from nodoMatriz import Lista
 class ListaEnlazada:
     def __init__(self):
         self.tamanio = 0
-        self.binario = ''
+        self.frecuenciaBinaria = ''
+        self.flag = False
         self.inicio = None
     
     def insertar(self, dato):
@@ -61,5 +62,5 @@ class ListaEnlazada:
         size = 0
         while size < self.tamanio:
             size+=1
-            print('Matriz '+str(size)+': '+temporal.nombre)
+            print(temporal.nombre)
             temporal = temporal.siguiente

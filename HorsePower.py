@@ -59,17 +59,56 @@ class HorsePower():
                 valor = dato.firstChild.data
                 filas.retornarEn(x).insertar(valor)
                 if int(valor) == 0:
-                    filas.retornarEn(x).binario+='0'
+                    filas.retornarEn(x).frecuenciaBinaria+='0'
                 else:
-                    filas.retornarEn(x).binario+='1'
+                    filas.retornarEn(x).frecuenciaBinaria+='1'
             self.matrices.retornarEn(contador).matriz= filas
             contador+=1                            
             print('Matriz cargada exitosamente.')
             time.sleep(0.4)
+
         #print(nombres[0].attributes['nombre'].value)
-        print(self.matrices.retornarEn(1).nombre)
-        print('acceso binario: '+self.matrices.retornarEn(1).matriz.retornarEn(1).binario)
-        self.matrices.retornarEn(1).matriz.retornarEn(1).mostrarNodos()
+        #print(self.matrices.retornarEn(1).nombre)
+        #print('acceso binario: '+self.matrices.retornarEn(1).matriz.retornarEn(1).binario)
+        #self.matrices.retornarEn(1).matriz.retornarEn(1).mostrarNodos()
+        
+        #parte de las matrices binarias 
+        #accedo a las matrices en la lista general
+        for a in range(self.matrices.tamanio):            
+            binarioFlag = False
+            print('\nCalculando matriz binaria: '+str(a+1))
+            b = a+1
+            matrizTemporal = ListaEnlazada()
+            #accedo a las filas de una matriz en la lista general
+            for i in range(self.matrices.retornarEn(b).matriz.tamanio):
+                #revisando si hay filas parecidas segun el patron de acceso
+                filaNueva = ListaEnlazada()
+                c = i + 1
+                for j in range(self.matrices.retornarEn(b).matriz.tamanio):
+                    d = j + 1
+                    if self.matrices.retornarEn(b).matriz.retornarEn(c).frecuenciaBinaria == self.matrices.retornarEn(b).matriz.retornarEn(c).frecuenciaBinaria and self.matrices.retornarEn(b).matriz.retornarEn(j).frecuenciaBinaria == False:
+                        self.matrices.retornarEn(b).reduccion = True 
+                        self.matrices.retornarEn(b).matriz.retornarEn(c).flag=True
+                        self.matrices.retornarEn(b).matriz.retornarEn(d).flag=True
+                        for z in range(self.matrices.retornarEn(b).matriz.retornarEn(d).tamanio):
+                            print('filas iguales, sumando')
+                            indice = z+1
+                            valor = self.matrices.retornarEn(b).matriz.retornarEn(c).retornarEn(indice) + self.matrices.retornarEn(b).matriz.retornarEn(d).retornarEn(indice)
+                            filaNueva.insertar(valor)
+                        matrizTemporal.insertarLi(filaNueva)            
+                print('Reduciendo...')
+                time.sleep(0.4)
+            self.matrices.retornarEn(b).matrizReducida = matrizTemporal
+
+        for i in range(self.matrices.tamanio):
+            print(self.matrices.retornarEn(i+1).nombre)
+            for j in range(self.matrices.retornarEn(i+1).matriz.tamanio):
+                print('fila: '+ str((j+1)))
+                self.matrices.retornarEn(i+1).matriz.retornarEn(j+1).mostrarNodos()
+            if self.matrices.retornarEn(i+1).reduccion == True:
+                for k in range(self.matrices.retornarEn(i+1).matrizReducida.tamanio):
+                    print('fila: '+ str((k+1)))
+                    self.matrices.retornarEn(i+1).matrizReducida.retornarEn(k+1).mostrarNodos()
         input('\nProceso terminado, presione ENTER para continuar.')
 
     def cargarArchivo(self):

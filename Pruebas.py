@@ -61,3 +61,6 @@ for matriz in matrices:
     datos = matriz.getElementsByTagName('dato')
     for dato in datos:
         print('Fila: '+ dato.attributes['x'].value+'  valor: '+dato.firstChild.data)        
+
+for a in range(10):
+    print(a)
