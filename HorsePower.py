@@ -2,6 +2,7 @@ from xml.dom import minidom
 import os
 from listaCircular import ListaEnlazada
 import time
+from graphviz import Digraph
 
 class HorsePower():
     def __init__(self):        
@@ -30,7 +31,7 @@ class HorsePower():
             elif opcion == 4:
                 self.datosEstudiante()
             elif opcion == 5:
-                input('generando grafica')
+                self.graficar()
             elif opcion == 6:
                 self.Clrscr()
                 salida = False
@@ -46,9 +47,9 @@ class HorsePower():
         nombres = self.gate.getElementsByTagName('matriz')    
         contador = 1
         for matriz in nombres:
-            self.matrices.insertar(matriz.attributes['nombre'].value)
             fila = matriz.getAttribute('n')
             columna = matriz.getAttribute('m')
+            self.matrices.insertar2(matriz.attributes['nombre'].value, fila, columna)            
             filas = ListaEnlazada()
             for a in range(int(fila)):
                 filax= ListaEnlazada()
@@ -76,29 +77,30 @@ class HorsePower():
         #accedo a las matrices en la lista general
         for a in range(self.matrices.tamanio):            
             binarioFlag = False
-            print('\nCalculando matriz binaria: '+str(a+1))
-            b = a+1
+            print('\nCalculando matriz binaria: '+str(a+1))            
             matrizTemporal = ListaEnlazada()
             #accedo a las filas de una matriz en la lista general
-            for i in range(self.matrices.retornarEn(b).matriz.tamanio):
+            for i in range(self.matrices.retornarEn(a+1).matriz.tamanio):
                 #revisando si hay filas parecidas segun el patron de acceso
                 filaNueva = ListaEnlazada()
-                c = i + 1
-                for j in range(self.matrices.retornarEn(b).matriz.tamanio):
-                    d = j + 1
-                    if self.matrices.retornarEn(b).matriz.retornarEn(c).frecuenciaBinaria == self.matrices.retornarEn(b).matriz.retornarEn(c).frecuenciaBinaria and self.matrices.retornarEn(b).matriz.retornarEn(j).frecuenciaBinaria == False:
-                        self.matrices.retornarEn(b).reduccion = True 
-                        self.matrices.retornarEn(b).matriz.retornarEn(c).flag=True
-                        self.matrices.retornarEn(b).matriz.retornarEn(d).flag=True
-                        for z in range(self.matrices.retornarEn(b).matriz.retornarEn(d).tamanio):
+                filaNueva.vaciarLista()                
+                for j in range(self.matrices.retornarEn(a+1).matriz.tamanio):
+                    print('entro aqui')
+                    
+                    if self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).frecuenciaBinaria == self.matrices.retornarEn(a+1).matriz.retornarEn(j + 2).frecuenciaBinaria and self.matrices.retornarEn(a+1).matriz.retornarEn(j+2).flag == False and self.matrices.retornarEn(a+1).matriz.retornarEn(i+1).flag == False:
+                        print('fila '+str(i+1)+'es igual a fila' + str(j+1))
+                        self.matrices.retornarEn(a+1).reduccion = True                        
+                        self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).flag=True
+                        self.matrices.retornarEn(a+1).matriz.retornarEn(j + 2).flag=True
+                        for z in range(self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).tamanio):
                             print('filas iguales, sumando')
                             indice = z+1
-                            valor = self.matrices.retornarEn(b).matriz.retornarEn(c).retornarEn(indice) + self.matrices.retornarEn(b).matriz.retornarEn(d).retornarEn(indice)
+                            valor = int(self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).retornarEn(indice).nombre) + int(self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).retornarEn(indice).nombre)
                             filaNueva.insertar(valor)
                         matrizTemporal.insertarLi(filaNueva)            
                 print('Reduciendo...')
                 time.sleep(0.4)
-            self.matrices.retornarEn(b).matrizReducida = matrizTemporal
+            self.matrices.retornarEn(a+1).matrizReducida = matrizTemporal
 
         for i in range(self.matrices.tamanio):
             print(self.matrices.retornarEn(i+1).nombre)
@@ -111,6 +113,53 @@ class HorsePower():
                     self.matrices.retornarEn(i+1).matrizReducida.retornarEn(k+1).mostrarNodos()
         input('\nProceso terminado, presione ENTER para continuar.')
 
+    def graficar(self):
+        self.Clrscr()
+        print('>Generar gráfica:\n')
+        self.matrices.mostrarNodos()
+        name = input('Ingrese el nombre de la matriz a graficar: ')
+
+        for a in range(self.matrices.tamanio):
+            if name == self.matrices.retornarEn(a+1).nombre:
+                f = Digraph(filename = self.matrices.retornarEn(a+1).nombre , format='png', encoding='UTF-8')
+                f.attr(rankdir = 'TB')
+                f.attr('node', shape='ellipse')
+                fila = self.matrices.retornarEn(a+1).fila
+                column = self.matrices.retornarEn(a+1).columna
+                f.node('fila','Filas: '+str(fila))
+                f.node('columna','Columnas: '+ str(column))                
+                f.node('raiz',self.matrices.retornarEn(a+1).nombre)
+                f.edge('raiz','fila')
+                f.edge('raiz','columna')
+                listaid = ListaEnlazada()
+                listaid2 = ListaEnlazada()
+                for i in range(self.matrices.retornarEn(a+1).matriz.tamanio):
+                    #aqui adentro lista de filas
+                    columna = int(column)
+                    id = ''
+                    id2 = ''
+                    if i+1 == 1:
+                        for j in range(columna):
+                            #aqui adentro una fila
+                            id = 'fila'+str(i+1)+str(j+1)
+                            f.node(id,self.matrices.retornarEn(a+1).matriz.retornarEn(i+1).retornarEn(j+1).nombre)
+                            f.edge('raiz', id)
+                            listaid.insertar(id)
+                    else:                        
+                        for j in range(columna):
+                            #aqui adentro una fila
+                            print('contenido de la lista id')
+                            listaid.mostrarNodos()
+                            id2 = 'fila'+str(i+1)+str(j+1)
+                            f.node(id2,self.matrices.retornarEn(a+1).matriz.retornarEn(i+1).retornarEn(j+1).nombre)
+                            f.edge(str(listaid.retornarEn(j+1).nombre), id2)
+                            listaid2.insertar(id2)
+                        listaid.vaciarLista()
+                        for k in range(columna):                            
+                            listaid.insertar(listaid2.retornarEn(k+1).nombre) 
+                        listaid2.vaciarLista()                        
+                f.view()
+    
     def cargarArchivo(self):
         self.Clrscr()
         ruta = input('Ingrese la ruta del archivo: ')
