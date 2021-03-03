@@ -1,4 +1,5 @@
 from listaCircular import ListaEnlazada
+from xml.dom import minidom
 
 listaMatriz = ListaEnlazada()
 
@@ -22,7 +23,7 @@ listaMatriz.retornarIndice(8).insertar('fila8, columna2')
 print(listaMatriz.retornarIndice(8).retornarIndice(1).nombre)
 print(listaMatriz.retornarIndice(8).retornarIndice(2).nombre) """
 #Creo una lista de matrices
-listaMatriz.insertar('Matriz 1')
+""" listaMatriz.insertar('Matriz 1')
 listaMatriz.insertar('Matriz 2')
 listaMatriz.insertar('Matriz 3')
 listaMatriz.insertar('Matriz 4')
@@ -50,4 +51,16 @@ listaMatriz.retornarIndice(1).matriz.retornarIndice(2).insertar('4')
 listaMatriz.retornarIndice(1).matriz.retornarIndice(2).insertar('5')
 listaMatriz.retornarIndice(1).matriz.retornarIndice(2).insertar('6')
 print('fila 2')
-listaMatriz.retornarIndice(1).matriz.retornarIndice(2).mostrarNodos()
+listaMatriz.retornarIndice(1).matriz.retornarIndice(2).mostrarNodos() """
+mixml = minidom.parse('Matriz2.xml')
+matrices = mixml.getElementsByTagName('matriz')
+for matriz in matrices:
+    print(matriz.attributes['nombre'].value)
+    print('filas: '+ matriz.getAttribute('n'))
+    print('columnas: '+ matriz.getAttribute('m'))
+    datos = matriz.getElementsByTagName('dato')
+    for dato in datos:
+        print('Fila: '+ dato.attributes['x'].value+'  valor: '+dato.firstChild.data)        
+
+for a in range(10):
+    print(a)
