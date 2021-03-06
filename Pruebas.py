@@ -52,7 +52,7 @@ listaMatriz.retornarIndice(1).matriz.retornarIndice(2).insertar('5')
 listaMatriz.retornarIndice(1).matriz.retornarIndice(2).insertar('6')
 print('fila 2')
 listaMatriz.retornarIndice(1).matriz.retornarIndice(2).mostrarNodos() """
-mixml = minidom.parse('Matriz2.xml')
+""" mixml = minidom.parse('Matriz2.xml')
 matrices = mixml.getElementsByTagName('matriz')
 for matriz in matrices:
     print(matriz.attributes['nombre'].value)
@@ -63,4 +63,12 @@ for matriz in matrices:
         print('Fila: '+ dato.attributes['x'].value+'  valor: '+dato.firstChild.data)        
 
 for a in range(10):
-    print(a)
+    print(a) """
+listaMatriz.insertar(1)
+listaMatriz.insertar(2)
+listaMatriz.insertar(3)
+listaMatriz.insertar(4)
+listaMatriz.mostrarNodos()
+listaMatriz.eliminarEn(2)
+print('')
+listaMatriz.mostrarNodos()
