@@ -1,8 +1,26 @@
 from listaCircular import ListaEnlazada
 from xml.dom import minidom
+from xml.etree.ElementTree import Element, SubElement, Comment
+import os
+from ElementTree_pretty import prettify
 
-listaMatriz = ListaEnlazada()
+top = Element('Matrices')
 
+comment = Comment('Generado por Amilcar')
+top.append(comment)
+
+child = SubElement(top,'Matriz',nombre="loquesea", m="1", n="2")
+child2= SubElement(child,'dato',x="1",y="2")
+child2.text = '5'
+
+
+#def ptfy():
+file = open("salida.xml", "w")
+file.write(str((prettify(top))))
+
+file.close()
+#ptfy()
+#listaMatriz = ListaEnlazada()
 """ listaMatriz.insertar('luis')
 listaMatriz.insertar('marvin')
 listaMatriz.insertar('evelin')
@@ -64,10 +82,10 @@ for matriz in matrices:
 
 for a in range(10):
     print(a) """
-listaMatriz.insertar(1)
+""" listaMatriz.insertar(1)
 listaMatriz.insertar(2)
 listaMatriz.insertar(3)
 listaMatriz.insertar(4)
 listaMatriz.retornarEn(1).nombre+=listaMatriz.retornarEn(1).nombre
 valor = listaMatriz.retornarEn(1).nombre+listaMatriz.retornarEn(2).nombre 
-print(valor)
+print(valor) """
