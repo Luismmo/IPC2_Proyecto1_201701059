@@ -71,6 +71,11 @@ class ListaEnlazada:
             contador+=1
             temporal = temporal.siguiente
         return temporal
+    
+    def eliminarEn(self,indice):
+        
+        self.retornarEn(indice-1).siguiente = self.retornarEn(indice+1)
+        self.tamanio-=1
         
 
     def longitud(self):
@@ -86,3 +91,11 @@ class ListaEnlazada:
     
     def vaciarLista(self):
         self.inicio = None
+    
+    def esVacia(self):
+        vacia = True
+        if self.tamanio==0:
+            return vacia
+        else:
+            vacia = False
+            return False
