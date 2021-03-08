@@ -11,34 +11,37 @@ class HorsePower():
         self.gate = None    
         self.matrices = ListaEnlazada()
         
-    def Menu(self):
+    def Menu(self):        
         salida = True        
         while salida:
-            self.Clrscr()
-            print('Menu Principal:\n')
-            print('\t1. Cargar Archivo')
-            print('\t2. Procesar Archivo')
-            print('\t3. Escribir archivo de salida')
-            print('\t4. Mostrar datos del estudiante')
-            print('\t5. Generar Grafica')
-            print('\t6. Salida')
-
-            opcion = int(input('\n\tIngrese una opción: '))
-            if opcion == 1:
-                self.cargarArchivo()
-            elif opcion == 2:
-                self.procesarArchivo()
-            elif opcion == 3:
-                self.escribirXML()
-            elif opcion == 4:
-                self.datosEstudiante()
-            elif opcion == 5:
-                self.graficar()
-            elif opcion == 6:
+            try:
                 self.Clrscr()
-                salida = False
-            else:
-                input('\nIngrese una opción valida.')
+                print('Menu Principal:\n')
+                print('\t1. Cargar Archivo')
+                print('\t2. Procesar Archivo')
+                print('\t3. Escribir archivo de salida')
+                print('\t4. Mostrar datos del estudiante')
+                print('\t5. Generar Grafica')
+                print('\t6. Salida')
+
+                opcion = int(input('\n\tIngrese una opción: '))
+                if opcion == 1:
+                    self.cargarArchivo()
+                elif opcion == 2:
+                    self.procesarArchivo()
+                elif opcion == 3:
+                    self.escribirXML()
+                elif opcion == 4:
+                    self.datosEstudiante()
+                elif opcion == 5:
+                    self.graficar()
+                elif opcion == 6:
+                    self.Clrscr()
+                    salida = False
+                else:
+                    input('\nIngrese una opción valida.')
+            except:
+                input('\nIngrese una opción válida. Presione ENTER y vuelva a intentarlo.')
     
     def Clrscr(self):
         os.system('cls')
