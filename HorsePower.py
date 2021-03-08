@@ -3,40 +3,45 @@ import os
 from listaCircular import ListaEnlazada
 import time
 from graphviz import Digraph
+from xml.etree.ElementTree import Element, SubElement, Comment
+from ElementTree_pretty import prettify
 
 class HorsePower():
     def __init__(self):        
         self.gate = None    
         self.matrices = ListaEnlazada()
         
-    def Menu(self):
+    def Menu(self):        
         salida = True        
         while salida:
-            self.Clrscr()
-            print('Menu Principal:\n')
-            print('\t1. Cargar Archivo')
-            print('\t2. Procesar Archivo')
-            print('\t3. Escribir archivo de salida')
-            print('\t4. Mostrar datos del estudiante')
-            print('\t5. Generar Grafica')
-            print('\t6. Salida')
-
-            opcion = int(input('\n\tIngrese una opción: '))
-            if opcion == 1:
-                self.cargarArchivo()
-            elif opcion == 2:
-                self.procesarArchivo()
-            elif opcion == 3:
-                input('escribiendo Archivo')
-            elif opcion == 4:
-                self.datosEstudiante()
-            elif opcion == 5:
-                self.graficar()
-            elif opcion == 6:
+            try:
                 self.Clrscr()
-                salida = False
-            else:
-                input('\nIngrese una opción valida.')
+                print('Menu Principal:\n')
+                print('\t1. Cargar Archivo')
+                print('\t2. Procesar Archivo')
+                print('\t3. Escribir archivo de salida')
+                print('\t4. Mostrar datos del estudiante')
+                print('\t5. Generar Grafica')
+                print('\t6. Salida')
+
+                opcion = int(input('\n\tIngrese una opción: '))
+                if opcion == 1:
+                    self.cargarArchivo()
+                elif opcion == 2:
+                    self.procesarArchivo()
+                elif opcion == 3:
+                    self.escribirXML()
+                elif opcion == 4:
+                    self.datosEstudiante()
+                elif opcion == 5:
+                    self.graficar()
+                elif opcion == 6:
+                    self.Clrscr()
+                    salida = False
+                else:
+                    input('\nIngrese una opción valida.')
+            except:
+                input('\nIngrese una opción válida. Presione ENTER y vuelva a intentarlo.')
     
     def Clrscr(self):
         os.system('cls')
@@ -118,7 +123,7 @@ class HorsePower():
             self.matrices.retornarEn(a+1).matrizReducida = reduccion
 
             if repeticiones.esVacia()==False:
-                self.matrices.retornarEn(a+1).repeticiones = repeticiones
+                #self.matrices.retornarEn(a+1).repeticiones = repeticiones
                 #reducida = ListaEnlazada()
                 #reducida.vaciarLista()
                 contador = 0
@@ -135,7 +140,14 @@ class HorsePower():
                         for u in range(self.matrices.retornarEn(a+1).matriz.retornarEn(k+1).tamanio):
                             newfila.insertar(self.matrices.retornarEn(a+1).matriz.retornarEn(k+1).retornarEn(u+1).nombre)
                         self.matrices.retornarEn(a+1).matrizReducida.insertarLi(newfila)
-                    
+                        contador+=1
+            for s in range(contador):
+                listita = ListaEnlazada()
+                listita.insertar(1)
+                self.matrices.retornarEn(a+1).repeticiones.insertarLi(listita)
+
+                        
+            print('\nMatriz reducida')
             for n in range(self.matrices.retornarEn(a+1).matrizReducida.tamanio):
                 print('fila '+ str(n+1))
                 self.matrices.retornarEn(a+1).matrizReducida.retornarEn(n+1).mostrarNodos()        
@@ -146,7 +158,7 @@ class HorsePower():
         self.Clrscr()
         print('>Generar gráfica:\n')
         self.matrices.mostrarNodos()
-        name = input('Ingrese el nombre de la matriz a graficar: ')
+        name = input('\nIngrese el nombre de la matriz a graficar: ')
 
         for a in range(self.matrices.tamanio):
             if name == self.matrices.retornarEn(a+1).nombre:
@@ -189,12 +201,41 @@ class HorsePower():
                         listaid2.vaciarLista()                        
                 f.view()
     
-    def cargarArchivo(self):
+    def escribirXML(self):
         self.Clrscr()
-        ruta = input('Ingrese la ruta del archivo: ')
-        mixml = minidom.parse(ruta)        
-        self.gate = mixml
-        input('\nCarga de archivo exitosa, presione ENTER para continuar.')
+        print('> Escribiendo archivo XML, espere un momento...')
+        top = Element('Matrices')
+        for a in range(self.matrices.tamanio):
+            fila = str(self.matrices.retornarEn(a+1).matrizReducida.tamanio)
+            columna = str(self.matrices.retornarEn(a+1).columna)
+            name = self.matrices.retornarEn(a+1).nombre+"_salida"
+            grupo = self.matrices.retornarEn(a+1).repeticiones.tamanio
+            child = SubElement(top,'Matriz', nombre = str(name), n = str(fila), m = str(columna),g = str(grupo))
+            for i in range(self.matrices.retornarEn(a+1).matrizReducida.tamanio):
+                for j in range(int(self.matrices.retornarEn(a+1).columna)):
+                    row = i+1
+                    column = j+1
+                    child2 = SubElement(child, 'dato', x = str(row),y = str(column))
+                    child2.text = str(self.matrices.retornarEn(a+1).matrizReducida.retornarEn(i+1).retornarEn(j+1).nombre)
+            for h in range(int (grupo)):
+                child3 = SubElement(child,'frecuencia', g = str(h+1))
+                child3.text = str(self.matrices.retornarEn(a+1).repeticiones.retornarEn(h+1).tamanio)
+                        
+        file = open('salida.xml', 'w')
+        file.write(str((prettify(top))))
+        file.close()
+        time.sleep(1.5)
+        os.system('salida.xml')
+    
+    def cargarArchivo(self):
+        try:
+            self.Clrscr()
+            ruta = input('Ingrese la ruta del archivo: ')
+            mixml = minidom.parse(ruta)        
+            self.gate = mixml
+            input('\nCarga de archivo exitosa, presione ENTER para continuar.')
+        except:
+            input('Error al cargar el archivo, verifique por favor.')
     
     def datosEstudiante(self):
         self.Clrscr()
