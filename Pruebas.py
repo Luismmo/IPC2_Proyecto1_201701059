@@ -68,7 +68,6 @@ listaMatriz.insertar(1)
 listaMatriz.insertar(2)
 listaMatriz.insertar(3)
 listaMatriz.insertar(4)
-listaMatriz.mostrarNodos()
-listaMatriz.eliminarEn(2)
-print('')
-listaMatriz.mostrarNodos()
+listaMatriz.retornarEn(1).nombre+=listaMatriz.retornarEn(1).nombre
+valor = listaMatriz.retornarEn(1).nombre+listaMatriz.retornarEn(2).nombre 
+print(valor)

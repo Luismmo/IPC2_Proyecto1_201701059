@@ -78,12 +78,17 @@ class HorsePower():
         for a in range(self.matrices.tamanio):            
             binarioFlag = False
             print('\nCalculando matriz binaria: '+str(a+1))            
-            repeticiones = ListaEnlazada()            
+            repeticiones = ListaEnlazada()
+            repeticiones.vaciarLista()
+            reduccion = ListaEnlazada()
+            reduccion.vaciarLista()
             #accedo a las filas de una matriz en la lista general
             for i in range(self.matrices.retornarEn(a+1).matriz.tamanio):
                 #revisando si hay filas parecidas segun el patron de acceso
                 repeticion = ListaEnlazada()                                
                 repeticion.vaciarLista()
+                newFila = ListaEnlazada()
+                newFila.vaciarLista()
                 for j in range(self.matrices.retornarEn(a+1).matriz.tamanio):
                     #print('entro aqui')
                     if (i+1)!=(j+1):
@@ -92,29 +97,51 @@ class HorsePower():
                                 repeticion.insertar(i+1)
                                 repeticion.insertar(j+1)
                                 self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).flag = True
-                                """ if (j+1)==self.matrices.retornarEn(a+1).matriz.tamanio:
-                                    self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).flag = True
-                                    self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).flag = True
-                                else:
-                                    self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).flag = True """
+                                #******Nuevo ciclo for para sumar******#
+                                for p in range(self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).tamanio):
+                                    valor = int(self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).retornarEn(p+1).nombre) + int(self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).retornarEn(p+1).nombre)
+                                    newFila.insertar(valor)
                             else:
                                 repeticion.insertar(j+1)
                                 self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).flag = True
-                                """ if (j+1) ==self.matrices.retornarEn(a+1).matriz.tamanio:
-                                    self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).flag = True
-                                    self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).flag = True
-                                else:
-                                    self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).flag = True """
+                                #******Nuevo ciclo for para sumar******#
+                                for p in range(self.matrices.retornarEn(a+1).matriz.retornarEn(i + 1).tamanio):
+                                     newFila.retornarEn(p+1).nombre += int(self.matrices.retornarEn(a+1).matriz.retornarEn(j + 1).retornarEn(p+1).nombre)
+                                    
                 #print('repeticiones')
                 #repeticion.mostrarNodos()
                 if repeticion.esVacia() == False:
-                    repeticiones.insertarLi(repeticion)                
+                    repeticiones.insertarLi(repeticion)
+                    reduccion.insertarLi(newFila)
                 time.sleep(0.1)
-            #self.matrices.retornarEn(a+1).matrizReducida = matrizTemporal           
-        for a in range(repeticiones.tamanio):
-            print('repeticiones')
-            repeticiones.retornarEn(a+1).mostrarNodos()
+            self.matrices.retornarEn(a+1).repeticiones = repeticiones
+            self.matrices.retornarEn(a+1).matrizReducida = reduccion
+
+            if repeticiones.esVacia()==False:
+                self.matrices.retornarEn(a+1).repeticiones = repeticiones
+                #reducida = ListaEnlazada()
+                #reducida.vaciarLista()
+                contador = 0
+                for k in range(self.matrices.retornarEn(a+1).matriz.tamanio):
+                    flag = False
+                    for t in range(repeticiones.tamanio):
+                        for b in range(repeticiones.retornarEn(t+1).tamanio):
+                            if k+1 == repeticiones.retornarEn(t+1).retornarEn(b+1).nombre:
+                                flag=True
+                    if flag == False:
+                        #print('entre en fila no coincide con nadie')
+                        newfila = ListaEnlazada()
+                        newfila.vaciarLista()
+                        for u in range(self.matrices.retornarEn(a+1).matriz.retornarEn(k+1).tamanio):
+                            newfila.insertar(self.matrices.retornarEn(a+1).matriz.retornarEn(k+1).retornarEn(u+1).nombre)
+                        self.matrices.retornarEn(a+1).matrizReducida.insertarLi(newfila)
+                    
+            for n in range(self.matrices.retornarEn(a+1).matrizReducida.tamanio):
+                print('fila '+ str(n+1))
+                self.matrices.retornarEn(a+1).matrizReducida.retornarEn(n+1).mostrarNodos()        
+        
         input('\nProceso terminado, presione ENTER para continuar.')
+
     def graficar(self):
         self.Clrscr()
         print('>Generar gráfica:\n')

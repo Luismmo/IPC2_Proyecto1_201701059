@@ -5,7 +5,7 @@ class Lista():
         self.nombre = nombre        
         self.matriz = None
         self.matrizReducida = None
-        self.reduccion = False
+        self.repeticiones = None
         self.siguiente = None
 
     """ def __init__(self, nombre,fila, columna):
